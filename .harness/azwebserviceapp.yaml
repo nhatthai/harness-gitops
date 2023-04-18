@@ -14,6 +14,14 @@ pipeline:
           deploymentType: AzureWebApp
           service:
             serviceRef: azureserviceapp
+            serviceInputs:
+              serviceDefinition:
+                type: AzureWebApp
+                spec:
+                  artifacts:
+                    primary:
+                      primaryArtifactRef: <+input>
+                      sources: <+input>
           environment:
             environmentRef: Dev
             deployToAll: false
@@ -66,3 +74,4 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
+        variables: []
