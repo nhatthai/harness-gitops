@@ -46,7 +46,7 @@ pipeline:
                   type: AzureSwapSlot
                   timeout: 20m
                   spec:
-                    targetSlot: dev
+                    targetSlot: stage
                     delegateSelectors:
                       - docker-delegate
                   failureStrategies: []
