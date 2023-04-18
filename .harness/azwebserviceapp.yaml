@@ -27,7 +27,7 @@ pipeline:
                   type: AzureSlotDeployment
                   timeout: 20m
                   spec:
-                    webApp: web-api
+                    webApp: net7webapi
                     deploymentSlot: dev
                     delegateSelectors:
                       - docker-delegate
@@ -48,7 +48,7 @@ pipeline:
                   type: AzureSwapSlot
                   timeout: 20m
                   spec:
-                    targetSlot: stage
+                    targetSlot: production
                     delegateSelectors:
                       - docker-delegate
                   failureStrategies: []
