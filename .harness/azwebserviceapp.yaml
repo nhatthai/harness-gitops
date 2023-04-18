@@ -1,0 +1,68 @@
+pipeline:
+  name: az-web-service-app
+  identifier: azwebserviceapp
+  projectIdentifier: webapi
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: Dev
+        identifier: Dev
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: AzureWebApp
+          service:
+            serviceRef: azureserviceapp
+          environment:
+            environmentRef: Dev
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: AzureContainers
+          execution:
+            steps:
+              - step:
+                  name: Slot Deployment
+                  identifier: slotDeployment
+                  type: AzureSlotDeployment
+                  timeout: 20m
+                  spec:
+                    webApp: web-api
+                    deploymentSlot: dev
+                    delegateSelectors:
+                      - docker-delegate
+                  failureStrategies: []
+              - step:
+                  name: Traffic shift
+                  identifier: trafficShift
+                  type: AzureTrafficShift
+                  timeout: 20m
+                  spec:
+                    traffic: "10"
+                    delegateSelectors:
+                      - docker-delegate
+                  failureStrategies: []
+              - step:
+                  name: Swap slots
+                  identifier: swapSlots
+                  type: AzureSwapSlot
+                  timeout: 20m
+                  spec:
+                    targetSlot: stage
+                    delegateSelectors:
+                      - docker-delegate
+                  failureStrategies: []
+            rollbackSteps:
+              - step:
+                  name: WebApp rollback
+                  identifier: webAppRollback
+                  type: AzureWebAppRollback
+                  timeout: 20m
+                  spec: {}
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
