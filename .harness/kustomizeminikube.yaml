@@ -30,7 +30,7 @@ pipeline:
                     skipDryRun: false
                     pruningEnabled: false
                     delegateSelectors:
-                      - docker-delegate
+                      - helm-delegate
                   failureStrategies: []
             rollbackSteps:
               - step:
