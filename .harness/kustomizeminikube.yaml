@@ -29,6 +29,9 @@ pipeline:
                   spec:
                     skipDryRun: false
                     pruningEnabled: false
+                    delegateSelectors:
+                      - docker-delegate
+                  failureStrategies: []
             rollbackSteps:
               - step:
                   name: Rollback Rollout Deployment
