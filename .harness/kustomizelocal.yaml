@@ -1,0 +1,53 @@
+pipeline:
+  name: kustomize-local
+  identifier: kustomizelocal
+  projectIdentifier: akswebapi
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: Deploy with Kustomize
+        identifier: Deploy_with_Kustomize
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: kustomizeservice
+          environment:
+            environmentRef: dev_1681976941706
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: devcluster_1681976941706
+          execution:
+            steps:
+              - step:
+                  name: Stage Deployment
+                  identifier: stageDeployment
+                  type: K8sBlueGreenDeploy
+                  timeout: 10m
+                  spec:
+                    skipDryRun: false
+                    pruningEnabled: false
+              - step:
+                  name: Swap primary with stage service
+                  identifier: bgSwapServices
+                  type: K8sBGSwapServices
+                  timeout: 10m
+                  spec:
+                    skipDryRun: false
+            rollbackSteps:
+              - step:
+                  name: Swap primary with stage service
+                  identifier: rollbackBgSwapServices
+                  type: K8sBGSwapServices
+                  timeout: 10m
+                  spec:
+                    skipDryRun: false
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
