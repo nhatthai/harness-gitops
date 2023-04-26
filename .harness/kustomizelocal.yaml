@@ -1,5 +1,5 @@
 pipeline:
-  name: kustomize-local
+  name: kustomize-minikube
   identifier: kustomizelocal
   projectIdentifier: akswebapi
   orgIdentifier: default
