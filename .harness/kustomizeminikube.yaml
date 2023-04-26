@@ -18,7 +18,7 @@ pipeline:
             environmentRef: dev_1681976941706
             deployToAll: false
             infrastructureDefinitions:
-              - identifier: devcluster_1681976941706
+              - identifier: MinikubeInfra
           execution:
             steps:
               - step:
