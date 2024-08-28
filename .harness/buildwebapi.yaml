@@ -1,0 +1,38 @@
+pipeline:
+  name: build-web-api
+  identifier: buildwebapi
+  projectIdentifier: webapi
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: account.Github_OAuth_1681981148062
+        repoName: NET7-WebAPI
+        build: <+input>
+  stages:
+    - stage:
+        name: Build-WebAPI
+        identifier: BuildWebAPI
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Docker
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: BuildAndPushDockerRegistry_1
+                  identifier: BuildAndPushDockerRegistry_1
+                  spec:
+                    connectorRef: account.harnessImage
+                    repo: net7-webapi
+                    tags:
+                      - latest
+                  failureStrategies: []
